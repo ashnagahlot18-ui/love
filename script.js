@@ -1,43 +1,47 @@
 const pages = document.querySelectorAll(".page");
-let currentPage = 0;
+let current = 0;
 
-// Auto page change every 25 seconds
 setInterval(() => {
-  pages[currentPage].classList.remove("active");
-  currentPage = (currentPage + 1) % pages.length;
-  pages[currentPage].classList.add("active");
+  pages[current].classList.remove("active");
+  current++;
+
+  if (current >= pages.length) {
+    showPopup();
+    current = pages.length - 1;
+    return;
+  }
+
+  pages[current].classList.add("active");
 }, 25000);
 
-// Music play after first click
-document.body.addEventListener("click", () => {
-  const music = document.getElementById("bgMusic");
-  if (music.paused) {
-    music.play();
-  }
-}, { once: true });
+// Start music
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("bgMusic").play();
+  document.getElementById("startOverlay").style.display = "none";
+};
 
-// Floating love words & emojis
-const floatingTexts = [
-  "I love you ❤️",
-  "My whole world 🌍",
-  "My best boy 🤍",
-  "I admire you ✨",
-  "Beginning • Middle • End ♾️",
-  "Forever us 💕",
-  "Home is you 🫶",
-  "Always 💖"
+// Floating text
+const words = [
+  "I love you 🤍",
+  "My whole world",
+  "Always us",
+  "Home is you",
+  "Forever ♾️"
 ];
-
-const container = document.querySelector(".floating-container");
 
 setInterval(() => {
   const span = document.createElement("span");
-  span.innerText = floatingTexts[Math.floor(Math.random() * floatingTexts.length)];
+  span.innerText = words[Math.floor(Math.random() * words.length)];
   span.style.left = Math.random() * 100 + "vw";
-  span.style.fontSize = (18 + Math.random() * 12) + "px";
-  container.appendChild(span);
+  document.querySelector(".floating-container").appendChild(span);
 
+  setTimeout(() => span.remove(), 15000);
+}, 2500);
+
+// Final popup
+function showPopup() {
   setTimeout(() => {
-    span.remove();
-  }, 12000);
-}, 1500);
+    alert("I love you beyond everything and everyone 🤍");
+  }, 2000);
+}
+
